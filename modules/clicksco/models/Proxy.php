@@ -2,7 +2,7 @@
 
 namespace app\modules\clicksco\models;
 
-use Yii;
+//use Yii;
 use linslin\yii2\curl;
 
 /**
@@ -45,7 +45,7 @@ class Proxy extends \yii\db\ActiveRecord
             [['ip', 'port'], 'required'],
             [['ip'], 'ip', 'ipv6' => false],
             ['port', 'integer', 'min' => 0, 'max' => 65535],
-            [['type', 'work'], 'integer'],
+            [['type', 'work', 'errors'], 'integer'],
             ['needlogin', 'boolean'],
             [['login', 'pass'], 'string', 'max' => 255],
         ];
@@ -65,6 +65,7 @@ class Proxy extends \yii\db\ActiveRecord
             'login'     => 'Login',
             'pass'      => 'Pass',
             'work'      => 'Work',
+            'errors'    => 'Errors'
         ];
     }
 
@@ -80,6 +81,20 @@ class Proxy extends \yii\db\ActiveRecord
         $curl = new curl\Curl();
 
         // Setting options of cURL with proxy
+        $this->setProxyToCurl($curl);
+        // Sending request to check-host.net/ip
+        $curl->post(self::$TARGET);
+
+        // If error, then increment errors counter
+        if (!empty($curl->errorCode)) { 
+            $this->errors++;
+            $this->save();
+        }
+
+        return $curl->errorText;
+    }
+
+    public function setProxyToCurl($curl) {
         $curl->setOption(CURLOPT_PROXY, $this->ip);
         $curl->setOption(CURLOPT_PROXYPORT, $this->port);
         switch ($this->type) {
@@ -93,10 +108,6 @@ class Proxy extends \yii\db\ActiveRecord
                 $curl->setOption(CURLOPT_PROXYTYPE, CURLPROXY_HTTP);
                 break;
         }
-
-        // Sending request to check-host.net/ip
-        $curl->post(self::$TARGET);
-        return (empty($curl->errorCode)? true : $curl->errorText);
     }
 
 }

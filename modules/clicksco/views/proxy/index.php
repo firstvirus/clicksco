@@ -5,6 +5,21 @@ use yii\helpers\Url;
 use yii\bootstrap\ActiveForm;
 
 ?>
+
+<?php /*if( Yii::$app->session->hasFlash('success') ) { ?>
+    <div class="alert alert-success alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <?= Yii::$app->session->getFlash('success'); ?>
+    </div>
+<?php } */?>
+
+<?php /*if( Yii::$app->session->hasFlash('error') ) { ?>
+    <div class="alert alert-danger alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <?= Yii::$app->session->getFlash('error'); ?>
+    </div>
+<?php } */?>
+
 <h1>Proxy list</h1>
 
 <?php $form = ActiveForm::begin([
@@ -63,6 +78,7 @@ $this->registerJs($js);
     <th>Type</th>
     <th>Login</th>
     <th>Password</th>
+    <th>Errors counter</th>
     <th>&nbsp;</th>
 <?php foreach ($proxies as $proxy) { ?>
     <tr>
@@ -71,7 +87,11 @@ $this->registerJs($js);
         <td><?= $types[$proxy['type']] ?></td>
         <td><?= $proxy['login'] ?></td>
         <td><?= $proxy['pass'] ?></td>
-        <td><a href="<?= Url::toRoute(['/clicksco/proxy/delete', 'id' => $proxy['id']]) ?>" class="btn btn-danger">Delete</a></td>
+        <td><?= $proxy['errors'] ?></td>
+        <td>
+            <a href="<?= Url::toRoute(['/clicksco/proxy/check', 'id' => $proxy['id']]) ?>" class="btn btn-default">Check</a>
+            <a href="<?= Url::toRoute(['/clicksco/proxy/delete', 'id' => $proxy['id']]) ?>" class="btn btn-danger">Delete</a>
+        </td>
     </tr>
 <?php } ?>
 

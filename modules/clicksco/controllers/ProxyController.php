@@ -25,5 +25,19 @@ class ProxyController extends \yii\web\Controller
         Proxy::deleteAll(['id' => $id]);
         return \Yii::$app->response->redirect(\yii\helpers\Url::to('/clicksco/proxy'));
     }
-    
+
+    public function actionCheck($id) {
+        $proxy = Proxy::findOne($id);
+        if (!empty($proxy)) {
+            $result = $proxy->checkProxy();
+            if (empty($result)) {
+                \Yii::$app->session->setFlash('success', 'Proxy work.');
+            } else {
+                \Yii::$app->session->setFlash('error', $result);
+            }
+        } else {
+            \Yii::$app->session->setFlash('error', 'Wrong proxy!');
+        }
+        return \Yii::$app->response->redirect(\yii\helpers\Url::to('/clicksco/proxy'));
+    }
 }
