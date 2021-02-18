@@ -12,7 +12,10 @@ class m210217_162931_options extends Migration
      */
     public function safeUp()
     {
-
+        $this->createTable('{{%clicksco_options}}', [
+            '[[key]]'   => $this->string()->notNull(),
+            '[[value]]' => $this->string(),
+        ]);
     }
 
     /**
@@ -20,23 +23,9 @@ class m210217_162931_options extends Migration
      */
     public function safeDown()
     {
-        echo "m210217_162931_options cannot be reverted.\n";
+        $this->dropTable('{{%clicksco_proxy}}');
 
-        return false;
+        return true;
     }
 
-    /*
-    // Use up()/down() to run migration code without a transaction.
-    public function up()
-    {
-
-    }
-
-    public function down()
-    {
-        echo "m210217_162931_options cannot be reverted.\n";
-
-        return false;
-    }
-    */
 }

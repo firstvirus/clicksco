@@ -12,7 +12,16 @@ class m210217_162921_proxy extends Migration
      */
     public function safeUp()
     {
-
+        $this->createTable('{{%clicksco_proxy}}', [
+            '[[id]]'        => $this->primaryKey(),
+            '[[ip]]'        => $this->string(15)->notNull(),
+            '[[port]]'      => $this->integer(5)->defaultValue('0'),
+            '[[type]]'      => $this->integer()->defaultValue('1'),
+            '[[needlogin]]' => $this->integer(1)->defaultValue('0'),
+            '[[login]]'     => $this->string(),
+            '[[pass]]'      => $this->string(),
+            '[[work]]'      => $this->integer()->defaultValue('0'),
+        ]);
     }
 
     /**
@@ -20,23 +29,9 @@ class m210217_162921_proxy extends Migration
      */
     public function safeDown()
     {
-        echo "m210217_162921_proxy cannot be reverted.\n";
+        $this->dropTable('{{%clicksco_proxy}}');
 
-        return false;
+        return true;
     }
 
-    /*
-    // Use up()/down() to run migration code without a transaction.
-    public function up()
-    {
-
-    }
-
-    public function down()
-    {
-        echo "m210217_162921_proxy cannot be reverted.\n";
-
-        return false;
-    }
-    */
 }
