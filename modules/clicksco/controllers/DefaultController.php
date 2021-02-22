@@ -3,7 +3,7 @@
 namespace app\modules\clicksco\controllers;
 
 use yii\web\Controller;
-use app\modules\clicksco\models\{ DataCollector, Options, Proxy };
+use app\modules\clicksco\models\{ DataCollector, Options };
 //use linslin\yii2\curl;
 
 /**
@@ -17,19 +17,16 @@ class DefaultController extends Controller
      */
     public function actionIndex()
     {
-
-//        $curl = new curl\Curl();
-
-        $proxy = new Proxy();
-        if ($proxy->load(\Yii::$app->request->post())) {
-            $page = DataCollector::getPage('https://www.coupons.com/coupon-codes/stores/', $proxy->ip, $proxy->port);
+        $option = Options::findOne(['key' => 'groups_parsed']);
+        if ($option->value == '0') {
+            $page = DataCollector::getPage('https://www.coupons.com/coupon-codes/stores/');
         }
 
-        return $this->render('index', ['page' => $page, 'proxy' => $proxy]);
+        return $this->render('index', ['page' => $page/*, 'proxy' => $proxy*/]);
     }
 
     public function actionParseGroup() {
-        $option = Options::findOne(['key', 'last_file']);
+        $option = Options::findOne(['key' => 'last_file']);
         $file = file_get_contents($option->value);
         $pattern = '/https:\/\/www\.coupons\.com\/coupon-codes\/stores\/[a-z]/';
         preg_match_all($pattern, $file, $keys);
