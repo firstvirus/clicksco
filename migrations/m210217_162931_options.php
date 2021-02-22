@@ -32,6 +32,11 @@ class m210217_162931_options extends Migration
             '[[key]]'   => 'last_proxy',
             '[[value]]' => '0',
         ]);
+
+        $this->insert('{{%clicksco_options}}', [
+            '[[key]]'   => 'last_file',
+            '[[value]]' => '',
+        ]);
     }
 
     /**

@@ -42,7 +42,7 @@ class Proxy extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['ip', 'port'], 'required'],
+            //[['ip', 'port'], 'required'],
             [['ip'], 'ip', 'ipv6' => false],
             ['port', 'integer', 'min' => 0, 'max' => 65535],
             [['type', 'work', 'errors'], 'integer'],
@@ -97,9 +97,10 @@ class Proxy extends \yii\db\ActiveRecord
     public function setProxyToCurl($curl) {
         $curl->setOption(CURLOPT_PROXY, $this->ip);
         $curl->setOption(CURLOPT_PROXYPORT, $this->port);
+        $curl->setOption(CURLOPT_PROXYTYPE, CURLPROXY_SOCKS4);
+/*
         switch ($this->type) {
             case 4:
-                $curl->setOption(CURLOPT_PROXYTYPE, CURLPROXY_SOCKS4);
                 break;
             case 5:
                 $curl->setOption(CURLOPT_PROXYTYPE, CURLPROXY_SOCKS5);
@@ -108,6 +109,7 @@ class Proxy extends \yii\db\ActiveRecord
                 $curl->setOption(CURLOPT_PROXYTYPE, CURLPROXY_HTTP);
                 break;
         }
+*/
     }
 
 }
